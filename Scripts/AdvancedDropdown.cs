@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Platinio;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.UIElements;
 
 public class AdvancedDropdown : EditorWindow 
@@ -25,8 +22,6 @@ public class AdvancedDropdown : EditorWindow
         
         
     }
-    
-    
 
     public void ShowDropdown<T>(List<DropdownItem<T>> elements)
     {
