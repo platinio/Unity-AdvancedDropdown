@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/Modules/UnityAdvancedDropdown/UXML/AdvancedDropdown.uss?fileID=7433441132597879392&amp;guid=10e057a043981e74aa79665c75e26b8e&amp;type=3#AdvancedDropdown" />
-    <ui:ListView focusable="true" name="ItemListView" fixed-item-height="60" />
+    <ui:ListView focusable="true" name="ItemListView" fixed-item-height="60" style="border-left-color: rgba(0, 0, 0, 0.71); border-right-color: rgba(0, 0, 0, 0.71); border-top-color: rgba(0, 0, 0, 0.71); border-bottom-color: rgba(0, 0, 0, 0.71); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px;" />
 </ui:UXML>
