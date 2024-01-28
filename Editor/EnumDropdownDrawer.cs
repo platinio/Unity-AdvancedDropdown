@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Platinio
+namespace Platinio.AdvancedDropdown
 {
     [CustomPropertyDrawer(typeof(EnumDropdown))]
     public class EnumDropdownDrawer : PropertyDrawer
@@ -31,7 +31,7 @@ namespace Platinio
             
             var dropDownItems = GetDropdownItems(property);
 
-            AdvancedDropdown.ShowDropdown(dropDownItems, delegate(string item)
+            AdvancedDropdownEditorWindow.ShowDropdown(dropDownItems, delegate(string item)
             {
                 UpdateDropdownValue(property, item);
             });

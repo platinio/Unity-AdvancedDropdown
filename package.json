@@ -1,8 +1,8 @@
 {
   "name": "com.advancedropdown",
   "displayName": "Advanced Dropdown",
-  "author": { "name": "James Roman", "url": "https://github.com/platinio" },
-  "version": "1.0.0",
+  "author": { "name": "Platinio", "url": "https://github.com/platinio" },
+  "version": "1.0.1",
   "unity": "2022.3",
   "description": "", 
   "license": "MIT",

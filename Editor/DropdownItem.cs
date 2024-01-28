@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Platinio
+namespace Platinio.AdvancedDropdown
 {
     public class DropdownItem<T>
     {
