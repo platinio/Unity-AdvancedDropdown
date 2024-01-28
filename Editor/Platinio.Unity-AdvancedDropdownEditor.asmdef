@@ -1,0 +1,18 @@
+{
+    "name": "Platinio.Unity-AdvancedDropdownEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f2b574592b3ae174e8232c7db88cca10"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
