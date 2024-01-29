@@ -11,7 +11,7 @@ namespace Platinio.AdvancedDropdown
 {
     public class AdvancedDropdownEditorWindow : EditorWindow 
     {
-        [SerializeField] private VisualTreeAsset visualTreeAsset = default;
+        [SerializeField] private VisualTreeAsset visualTreeAsset;
         [SerializeField] protected VisualTreeAsset listElementTreeAsset;
 
         private List<dynamic> dropdownElements;
