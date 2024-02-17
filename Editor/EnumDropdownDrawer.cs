@@ -60,7 +60,7 @@ namespace Platinio.AdvancedDropdown
             foreach (var enumName in property.enumDisplayNames)
             {
                 bool isSelected = enumName == property.enumDisplayNames[property.enumValueIndex];
-                dropDownItems.Add(new DropdownItem<string>(enumName, null,  isSelected, enumName));
+                dropDownItems.Add(new DropdownItem<string>(enumName,  isSelected, enumName));
             }
             
             return dropDownItems;

@@ -14,6 +14,7 @@ namespace Platinio.AdvancedDropdown
         [SerializeField] private VisualTreeAsset visualTreeAsset;
         [SerializeField] protected VisualTreeAsset listElementTreeAsset;
 
+        private Dictionary<int, Sprite> iconCache = new();
         private List<dynamic> dropdownElements;
         
         private readonly Color selectedColor = new (66.0f / 255.0f, 135.0f / 255.0f, 245.0f / 255.0f);
@@ -23,6 +24,14 @@ namespace Platinio.AdvancedDropdown
         private static readonly float DropdownItemHeight = 60.0f;
         private static readonly float WindowWidth = 350.0f;
         private static Func<Vector2> getCurrentMousePositionFunc;
+
+        private void OnDestroy()
+        {
+            foreach (var dropdownElement in dropdownElements)
+            {
+                dropdownElement.OnDestroy();
+            }
+        }
 
         public void CreateGUI()
         {
@@ -69,8 +78,11 @@ namespace Platinio.AdvancedDropdown
             return getCurrentMousePositionFunc();
         }
 
+        private VisualElement Root;
+        
         protected void CreateDatabaseListGUI<T>(VisualElement root, List<DropdownItem<T>> elements, Action<T> onDropdownSelectionChanged)
         {
+            Root = root;
             var listView = root.Q("ItemListView") as ListView;
             listView.Clear();
             listView.makeItem = MakeItem;
@@ -88,14 +100,40 @@ namespace Platinio.AdvancedDropdown
         private void BindEntryItem(VisualElement element, int index)
         {
             element.Q<Label>().text = dropdownElements[index].Name;
-            element.Q("Icon").style.backgroundImage = new StyleBackground(dropdownElements[index].Icon as Sprite);
-            
+
+            var icon = iconCache.ContainsKey(index) ? iconCache[index] : null;
+
+            element.Q("Icon").style.backgroundImage = new StyleBackground(icon);
             bool selected = dropdownElements[index].IsSelected;
 
             Color color = selected ? selectedColor : normalColor;
             element.style.backgroundColor = new StyleColor(color);
         }
-        
+
+        private void Update()
+        {
+            if (Root == null) return;
+            var listView = Root.Q("ItemListView") as ListView;
+            if (listView == null) return;
+
+            var elements = listView.itemsSource;
+
+            for (int i = 0; i < elements.Count; i++)
+            {
+                VisualElement visualElement = listView.GetRootElementForId(i);
+                if (visualElement == null) continue;
+               
+                dynamic element = elements[i];
+                if (element.Icon != null) continue;
+
+                element.TryUpdateTexture();
+                if (element.Icon == null) continue;
+
+                iconCache[i] = element.Icon;
+                BindEntryItem(visualElement, i);
+            }
+        }
+
         private VisualElement MakeItem() => listElementTreeAsset.CloneTree();
     }
 }
