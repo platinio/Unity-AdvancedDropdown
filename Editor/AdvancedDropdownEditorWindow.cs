@@ -101,7 +101,7 @@ namespace Platinio.AdvancedDropdown
         {
             element.Q<Label>().text = dropdownElements[index].Name;
 
-            var icon = iconCache.ContainsKey(index) ? iconCache[index] : null;
+            Sprite icon = iconCache.ContainsKey(index) ? iconCache[index] : dropdownElements[index].Icon;
 
             element.Q("Icon").style.backgroundImage = new StyleBackground(icon);
             bool selected = dropdownElements[index].IsSelected;
