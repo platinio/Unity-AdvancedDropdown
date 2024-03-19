@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Platinio.AdvancedDropdown
@@ -12,6 +13,7 @@ namespace Platinio.AdvancedDropdown
     public class AdvancedDropdownEditorWindow : EditorWindow 
     {
         [SerializeField] private VisualTreeAsset visualTreeAsset;
+        [SerializeField] protected VisualTreeAsset listElementWithIconTreeAsset;
         [SerializeField] protected VisualTreeAsset listElementTreeAsset;
 
         private Dictionary<int, Sprite> iconCache = new();
@@ -85,7 +87,10 @@ namespace Platinio.AdvancedDropdown
             Root = root;
             var listView = root.Q("ItemListView") as ListView;
             listView.Clear();
-            listView.makeItem = MakeItem;
+            listView.makeItem = delegate
+            {
+                return MakeItem(HasIcon(elements));
+            }; 
             listView.bindItem = BindEntryItem;
             listView.itemsSource = elements;
             listView.selectionType = SelectionType.Single;
@@ -97,13 +102,25 @@ namespace Platinio.AdvancedDropdown
             };
         }
 
+        private bool HasIcon<T>(List<DropdownItem<T>> elements)
+        {
+            foreach (var element in elements)
+            {
+                if (element.Icon != null) return true;
+            }
+
+            return false;
+        }
+
         private void BindEntryItem(VisualElement element, int index)
         {
             element.Q<Label>().text = dropdownElements[index].Name;
 
             Sprite icon = iconCache.ContainsKey(index) ? iconCache[index] : dropdownElements[index].Icon;
+            VisualElement iconElement = element.Q("Icon");
+            
+            if (iconElement != null) iconElement.style.backgroundImage = new StyleBackground(icon);
 
-            element.Q("Icon").style.backgroundImage = new StyleBackground(icon);
             bool selected = dropdownElements[index].IsSelected;
 
             Color color = selected ? selectedColor : normalColor;
@@ -134,6 +151,9 @@ namespace Platinio.AdvancedDropdown
             }
         }
 
-        private VisualElement MakeItem() => listElementTreeAsset.CloneTree();
+        private VisualElement MakeItem(bool hasIcon)
+        {
+            return hasIcon ? listElementWithIconTreeAsset.CloneTree() : listElementTreeAsset.CloneTree();
+        }
     }
 }
