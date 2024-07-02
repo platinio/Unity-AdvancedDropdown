@@ -5,7 +5,6 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Platinio.AdvancedDropdown
