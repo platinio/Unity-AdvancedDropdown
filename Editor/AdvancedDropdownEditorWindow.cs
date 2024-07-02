@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.UIElements;
+using Assert = UnityEngine.Assertions.Assert;
 
 namespace Platinio.AdvancedDropdown
 {
@@ -25,7 +26,8 @@ namespace Platinio.AdvancedDropdown
         private static readonly float DropdownItemHeight = 60.0f;
         private static readonly float WindowWidth = 350.0f;
         private static Func<Vector2> getCurrentMousePositionFunc;
-
+        private static AdvancedDropdownEditorWindow instance;
+       
         private void OnDestroy()
         {
             foreach (var dropdownElement in dropdownElements)
@@ -46,18 +48,17 @@ namespace Platinio.AdvancedDropdown
 
         public static void ShowDropdown<T>(List<DropdownItem<T>> elements, Action<T> onDropdownSelectionChanged)
         {
-            var dropdown = CreateInstance<AdvancedDropdownEditorWindow>();
+            instance = CreateInstance<AdvancedDropdownEditorWindow>();
             
-            dropdown.ShowAsDropDown(new Rect(dropdown.GetCurrentMousePosition(), Vector2.zero), dropdown.CalculateWindowHeight(elements.Count));
+            instance.ShowAsDropDown(new Rect(instance.GetCurrentMousePosition(), Vector2.zero), instance.CalculateWindowHeight(elements.Count));
+            ToolbarSearchField toolbarSearchField = instance.rootVisualElement.Q<ToolbarSearchField>();
             
-            dropdown.dropdownElements = new List<dynamic>();
-            
-            foreach (var element in elements)
+            toolbarSearchField.RegisterValueChangedCallback(evt =>
             {
-                dropdown.dropdownElements.Add(element);
-            }
+                instance.CreateDatabaseListGUI(instance.rootVisualElement, elements, onDropdownSelectionChanged, evt.newValue);
+            });
 
-            dropdown.CreateDatabaseListGUI(dropdown.rootVisualElement, elements, onDropdownSelectionChanged);
+            instance.CreateDatabaseListGUI(instance.rootVisualElement, elements, onDropdownSelectionChanged);
         }
 
         private Vector2 CalculateWindowHeight(int elementCount)
@@ -81,17 +82,25 @@ namespace Platinio.AdvancedDropdown
 
         private VisualElement Root;
         
-        protected void CreateDatabaseListGUI<T>(VisualElement root, List<DropdownItem<T>> elements, Action<T> onDropdownSelectionChanged)
+        protected void CreateDatabaseListGUI<T>(VisualElement root, List<DropdownItem<T>> elements, Action<T> onDropdownSelectionChanged, string filter = "")
         {
+            elements = FilterElements(elements, filter);
+            dropdownElements = new List<dynamic>();
+
+            foreach (var element in elements)
+            {
+                dropdownElements.Add(element);
+            }
+
             Root = root;
             var listView = root.Q("ItemListView") as ListView;
             listView.Clear();
+            listView.itemsSource = elements;
             listView.makeItem = delegate
             {
                 return MakeItem(HasIcon(elements));
             }; 
             listView.bindItem = BindEntryItem;
-            listView.itemsSource = elements;
             listView.selectionType = SelectionType.Single;
             listView.selectionChanged += delegate(IEnumerable<object> objects)
             {
@@ -99,6 +108,27 @@ namespace Platinio.AdvancedDropdown
                 onDropdownSelectionChanged.Invoke(dropdownItem.Item);
                 Close();
             };
+        }
+
+        private List<DropdownItem<T>> FilterElements<T>(List<DropdownItem<T>> elements, string filter)
+        {
+            if (!string.IsNullOrEmpty(filter))
+            {
+                elements = elements.ToList();
+                filter = filter.ToLower();
+                
+                for (int i = elements.Count - 1; i >= 0; i--)
+                {
+                    string elementName = elements[i].Name.ToLower();
+                    
+                    if (!elementName.Contains(filter))
+                    {
+                        elements.RemoveAt(i);
+                    }
+                }
+            }
+
+            return elements.ToList();
         }
 
         private bool HasIcon<T>(List<DropdownItem<T>> elements)
