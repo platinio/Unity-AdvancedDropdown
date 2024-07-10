@@ -6,9 +6,8 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Assert = UnityEngine.Assertions.Assert;
 
-namespace Platinio.AdvancedDropdown
+namespace ArcaneOnyx.AdvancedDropdown
 {
     public class AdvancedDropdownEditorWindow : EditorWindow 
     {
@@ -73,7 +72,6 @@ namespace Platinio.AdvancedDropdown
             if (getCurrentMousePositionFunc == null)
             {
                 var currentMousePositionMethod = typeof(Editor).GetMethod("GetCurrentMousePosition", BindingFlags.NonPublic | BindingFlags.Static);
-                Assert.IsNotNull(currentMousePositionMethod);
                 getCurrentMousePositionFunc = (Func<Vector2>) Delegate.CreateDelegate(typeof(Func<Vector2>), currentMousePositionMethod);
             }
 

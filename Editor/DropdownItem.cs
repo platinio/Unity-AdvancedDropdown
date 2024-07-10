@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Platinio.AdvancedDropdown
+namespace ArcaneOnyx.AdvancedDropdown
 {
     public delegate Texture2D GetTexture(Object instance);
     

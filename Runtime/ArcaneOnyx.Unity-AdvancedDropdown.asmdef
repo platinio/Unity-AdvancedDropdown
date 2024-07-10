@@ -1,12 +1,8 @@
 {
-    "name": "Platinio.Unity-AdvancedDropdownEditor",
+    "name": "ArcaneOnyx.Unity-AdvancedDropdown",
     "rootNamespace": "",
-    "references": [
-        "GUID:f2b574592b3ae174e8232c7db88cca10"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "references": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

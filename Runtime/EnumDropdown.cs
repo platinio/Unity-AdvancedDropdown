@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Platinio.AdvancedDropdown
+namespace ArcaneOnyx.AdvancedDropdown
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public sealed class EnumDropdown : PropertyAttribute

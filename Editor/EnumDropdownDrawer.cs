@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Platinio.AdvancedDropdown
+namespace ArcaneOnyx.AdvancedDropdown
 {
     [CustomPropertyDrawer(typeof(EnumDropdown))]
     public class EnumDropdownDrawer : PropertyDrawer
