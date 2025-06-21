@@ -1,7 +1,7 @@
 {
-  "name": "com.advanceddropdown",
+  "name": "com.arcaneonyx.advanceddropdown",
   "displayName": "Advanced Dropdown",
-  "author": { "name": "Platinio", "url": "https://github.com/platinio" },
+  "author": { "name": "James Roman", "url": "https://github.com/platinio" },
   "version": "1.0.1",
   "unity": "2022.3",
   "description": "", 
