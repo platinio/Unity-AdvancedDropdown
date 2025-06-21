@@ -7,4 +7,12 @@
   "description": "", 
   "license": "MIT",
   "dependencies": {}  
+  "samples": [
+        {
+            "displayName": "Enum Sample",
+            "description": "",
+            "path": "Samples~"
+        }
+    ]
+
 }
