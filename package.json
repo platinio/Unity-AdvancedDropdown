@@ -6,7 +6,7 @@
   "unity": "2022.3",
   "description": "", 
   "license": "MIT",
-  "dependencies": {}  
+  "dependencies": {},
   "samples": [
         {
             "displayName": "Enum Sample",
