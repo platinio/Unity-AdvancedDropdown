@@ -21,6 +21,8 @@ namespace ArcaneOnyx.AdvancedDropdown
         private readonly Color selectedColor = new (66.0f / 255.0f, 135.0f / 255.0f, 245.0f / 255.0f);
         private readonly Color normalColor = new (56.0f / 255.0f, 56.0f / 255.0f, 56.0f / 255.0f);
 
+        private const string ItemListViewName = "ItemListView";
+
         private static readonly float MaxWindowHeight = 500.0f;
         private static readonly float DropdownItemHeight = 60.0f;
         private static readonly float WindowWidth = 350.0f;
@@ -54,10 +56,22 @@ namespace ArcaneOnyx.AdvancedDropdown
             
             toolbarSearchField.RegisterValueChangedCallback(evt =>
             {
-                instance.CreateDatabaseListGUI(instance.rootVisualElement, elements, onDropdownSelectionChanged, evt.newValue);
+                instance.CreateDatabaseListGUI(instance.rootVisualElement, elements, evt.newValue);
             });
 
-            instance.CreateDatabaseListGUI(instance.rootVisualElement, elements, onDropdownSelectionChanged);
+            instance.CreateDatabaseListGUI(instance.rootVisualElement, elements);
+            instance.ListenForPick(onDropdownSelectionChanged);
+        }
+
+        private void ListenForPick<T>(Action<T> onDropdownSelectionChanged)
+        {
+            var listView = rootVisualElement.Q(ItemListViewName) as ListView;
+            listView.selectionChanged += delegate(IEnumerable<object> objects)
+            {
+                var dropdownItem = objects.FirstOrDefault() as DropdownItem<T>;
+                onDropdownSelectionChanged.Invoke(dropdownItem.Item);
+                Close();
+            };
         }
 
         private Vector2 CalculateWindowHeight(int elementCount)
@@ -80,7 +94,7 @@ namespace ArcaneOnyx.AdvancedDropdown
 
         private VisualElement Root;
         
-        protected void CreateDatabaseListGUI<T>(VisualElement root, List<DropdownItem<T>> elements, Action<T> onDropdownSelectionChanged, string filter = "")
+        protected void CreateDatabaseListGUI<T>(VisualElement root, List<DropdownItem<T>> elements, string filter = "")
         {
             elements = FilterElements(elements, filter);
             dropdownElements = new List<dynamic>();
@@ -91,7 +105,7 @@ namespace ArcaneOnyx.AdvancedDropdown
             }
 
             Root = root;
-            var listView = root.Q("ItemListView") as ListView;
+            var listView = root.Q(ItemListViewName) as ListView;
             listView.Clear();
             listView.itemsSource = elements;
             listView.makeItem = delegate
@@ -100,12 +114,6 @@ namespace ArcaneOnyx.AdvancedDropdown
             }; 
             listView.bindItem = BindEntryItem;
             listView.selectionType = SelectionType.Single;
-            listView.selectionChanged += delegate(IEnumerable<object> objects)
-            {
-                var dropdownItem = objects.FirstOrDefault() as DropdownItem<T>;
-                onDropdownSelectionChanged.Invoke(dropdownItem.Item);
-                Close();
-            };
         }
 
         private List<DropdownItem<T>> FilterElements<T>(List<DropdownItem<T>> elements, string filter)
@@ -157,7 +165,7 @@ namespace ArcaneOnyx.AdvancedDropdown
         private void Update()
         {
             if (Root == null) return;
-            var listView = Root.Q("ItemListView") as ListView;
+            var listView = Root.Q(ItemListViewName) as ListView;
             if (listView == null) return;
 
             var elements = listView.itemsSource;
